@@ -34,7 +34,7 @@ Tarefas Completas
     {
         foreach (var item in CompletedTodos)
         {
-            <div class=@(item.Complete ? "row line" : "row")> <span> @item.Description </span> <input type="checkbox" @onchange="() => { item.Complete = false; CheckBoxCompletedChanged(item); }" /></div>
+            <div class="row"> <span class=@(item.Complete ? "line" : "")> @item.Description </span> <input type="checkbox" @onchange="() => { item.Complete = false; CheckBoxCompletedChanged(item); }" /></div>
         }
     }
 </div>
