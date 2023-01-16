@@ -6,5 +6,9 @@
 
         public bool Complete { get; set; }
 
+        public DateTime DeadLine { get; set; }
+
+        public DateTime CompleteAt { get; set; }
+
     }
 }

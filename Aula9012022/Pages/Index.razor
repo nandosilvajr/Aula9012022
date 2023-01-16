@@ -3,6 +3,7 @@
 @using Models
 
 <PageTitle>Index</PageTitle>
+<div class="d-flex">
 
 <div class="mb-3">
     <label for="exampleFormControlInput1" class="form-label">Todo</label>
@@ -10,6 +11,17 @@
         type="text" class="form-control" 
         id="exampleFormControlInput1" 
         placeholder="Adicione uma task" @bind-value=Todo.Description>
+</div>
+
+    <div class="mb-3">
+        <label for="exampleFormControlInput2" class="form-label">Data</label>
+        <input type="date" class="form-control"
+                min="@(DateTime.Today)"
+               id="exampleFormControlInput2"
+               placeholder="Informe uma data" @bind-value=Todo.DeadLine>
+    </div>
+
+
 </div>
 <button class="btn btn-primary" @onclick=AddTodo>Add</button>
 <hr />
@@ -21,7 +33,14 @@ Tarefas
 {
     foreach (var item in Todos)
     {
-        <div class="row">@item.Description <input type="checkbox"  @onchange="() => { item.Complete = true; CheckBoxChanged(item); }" /></div>
+            if(!item.Complete)
+            {
+                <div class="row">
+                    <div class="col">@item.Description</div>
+                    <div class="col">@item.DeadLine</div>
+                    <input class="col-1 h-100" type="checkbox"  @onchange="() => { item.Complete = true; item.CompleteAt = DateTime.Now; }" /> 
+                </div>
+            }
     }
 }
 </div>
@@ -29,12 +48,20 @@ Tarefas
 <hr />
 
 Tarefas Completas
-<div style="min-height:200px">
-    @if (CompletedTodos.Any())
+<div style=@("min-height:200px")>
+    @if (Todos.Any())
     {
-        foreach (var item in CompletedTodos)
+        foreach (var item in Todos)
         {
-            <div class="row"> <span class=@(item.Complete ? "line" : "")> @item.Description </span> <input type="checkbox" @onchange="() => { item.Complete = false; CheckBoxCompletedChanged(item); }" /></div>
+            if (item.Complete)
+            {
+                <div class="row">
+                    <div class="col">@item.Description</div>
+                    <div class="col">@item.DeadLine</div>
+                    <div class="col">@item.CompleteAt</div>
+                    <input class="col-1 h-100" type="checkbox" @onchange="() => { item.Complete = false; item.CompleteAt = DateTime.MinValue; }" />
+                </div>
+            }
         }
     }
 </div>
