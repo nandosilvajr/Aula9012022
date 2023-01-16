@@ -1,0 +1,103 @@
+﻿@page "/"
+
+@using Models
+
+<PageTitle>Index</PageTitle>
+
+<div class="mb-3">
+    <label for="exampleFormControlInput1" class="form-label">Todo</label>
+    <input 
+        type="text" class="form-control" 
+        id="exampleFormControlInput1" 
+        placeholder="Adicione uma task" @bind-value=Todo.Description>
+</div>
+<button class="btn btn-primary" @onclick=AddTodo>Add</button>
+<hr />
+Tarefas
+
+<div style="min-height:200px; padding-left: 20px">
+
+@if(Todos.Any())
+{
+    foreach (var item in Todos)
+    {
+        <div class="row">@item.Description <input type="checkbox"  @onchange="() => { item.Complete = true; CheckBoxChanged(item); }" /></div>
+    }
+}
+</div>
+
+<hr />
+
+Tarefas Completas
+<div style="min-height:200px">
+    @if (CompletedTodos.Any())
+    {
+        foreach (var item in CompletedTodos)
+        {
+            <div class=@(item.Complete ? "row line" : "row")> <span> @item.Description </span> <input type="checkbox" @onchange="() => { item.Complete = false; CheckBoxCompletedChanged(item); }" /></div>
+        }
+    }
+</div>
+
+@*
+
+        <div class="row">@item.Description <input type="checkbox" value=@item @onchange="() => CheckBoxChanged(item)" /></div>
+
+
+@if (CompletedTodos.Any())
+{
+    foreach (var item in CompletedTodos)
+    {
+        <div class="row">@item.Description <input type="checkbox" @bind-value="item.Complete" /></div>
+        if (item.Complete)
+        {
+            TodoComplete(item);
+        }
+    }
+}
+
+*@
+@code{
+
+    public List<Todo> Todos = new();
+
+    public List<Todo> CompletedTodos = new();
+
+    public Todo Todo { get; set; } = new();
+
+    public string Description = string.Empty;
+
+    public int iteracao;
+
+    public void AddTodo(object teste)
+    {
+
+        var newTodo = new Todo
+            {
+                Description = Todo.Description,
+                Complete = Todo.Complete
+        };
+
+        Todos.Add(newTodo);
+    }
+
+    public void CheckBoxChanged(Todo todo)
+    {
+        CompletedTodos.Add(todo);
+        Todos.Remove(todo);
+    }
+
+    public void CheckBoxCompletedChanged(Todo todo)
+    {
+
+        var newItem = new Todo { Complete = todo.Complete, Description = todo.Description };
+
+        CompletedTodos.Remove(todo);
+        Todos.Add(newItem);
+    }
+
+}
+
+
+
+
